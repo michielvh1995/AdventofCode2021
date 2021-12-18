@@ -13,13 +13,11 @@ func CalculateDepth(r io.Reader) (int, error) {
 	//  For this we first need to create a bufio scanner
 	scanner := bufio.NewScanner(r)
 
-	var previous int // previous depth
-	var counts int   // amount of increases
+	var previous = 100000 // previous depth
+	var counts int        // amount of increases
 
 	// The we read the file line by line
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-
 		// Here we do the str to int conversion
 		depth, err := strconv.Atoi(scanner.Text())
 		check(err)

@@ -6,6 +6,7 @@ import (
 	"io"
 	"os"
 	"strconv"
+	"strings"
 )
 
 func CalculateDepth(r io.Reader) (int, error) {
@@ -13,29 +14,32 @@ func CalculateDepth(r io.Reader) (int, error) {
 	//  For this we first need to create a bufio scanner
 	scanner := bufio.NewScanner(r)
 
-	var previous int // previous depth
-	var counts int   // amount of increases
+	var x, y int
 
 	// The we read the file line by line
 	for scanner.Scan() {
-		fmt.Println(scanner.Text())
-
 		// Here we do the str to int conversion
-		depth, err := strconv.Atoi(scanner.Text())
+		command := strings.Split(scanner.Text(), " ")
+		movement, err := strconv.Atoi(command[1])
 		check(err)
 
-		if previous < depth {
-			counts++
+		// Now we turn the second part into the amount
+		if command[0] == "forward" {
+			x += movement
+		} else if command[0] == "down" {
+			y += movement
+		} else if command[0] == "up" {
+			y -= movement
 		}
-		previous = depth
+
 	}
 
-	return counts, scanner.Err()
+	return x * y, scanner.Err()
 }
 
 func main() {
 	// Get the input file handle:
-	f, err := os.Open("./input.txt")
+	f, err := os.Open("./input2a.txt")
 	check(err)
 
 	// Defer delays this function until the current function returns.
